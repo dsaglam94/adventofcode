@@ -1,11 +1,12 @@
 export const x = "";
 
-const input = await Deno.readTextFile("./inputCopy.txt");
+const input = await Deno.readTextFile("./input.txt");
 const inputArr = input.split("\n");
 
 // ****** Second Part *******
 
 const items: Array<string[]> = [];
+const found: Array<string> = [];
 
 // groups
 for (let i = 0; i < inputArr.length; i += 3) {
@@ -13,7 +14,48 @@ for (let i = 0; i < inputArr.length; i += 3) {
   items.push(triplets);
 }
 
-console.log(items);
+items.forEach((item) => {
+  const sortedItem = item.sort((a, b) => {
+    if (a.length < b.length) {
+      return 1;
+    }
+
+    if (a.length > b.length) {
+      return -1;
+    }
+
+    return 0;
+  });
+
+  for (let i = 0; i < sortedItem[0].length; i++) {
+    const char = sortedItem[0][i];
+
+    if (
+      sortedItem[1].indexOf(char) !== -1 &&
+      sortedItem[2].indexOf(char) !== -1
+    ) {
+      found.push(char);
+      break;
+    }
+  }
+});
+
+const strItems = found.join("");
+
+let sum = 0;
+
+for (let i = 0; i < strItems.length; i++) {
+  const code = strItems.charCodeAt(i);
+
+  // if true we have an uppercase
+  if (code > 64 && code < 91) {
+    sum += code - 64 + 26;
+  } else {
+    sum += code - 96;
+  }
+}
+
+console.log(sum);
 
 // ****** Second Part *******
 //
